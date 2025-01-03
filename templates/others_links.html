@@ -1,0 +1,28 @@
+<!--other-->
+<div class="row" style="margin: 15% 10% 0% 10%">
+    <div class="col-12 col-md-4 col-lg-4">
+        <h3>
+            Other Projects
+        </h3>
+        <p>
+            Web Development | Miscellaneous
+        </p>
+    </div>
+    <div class="col-12 col-md-8 col-lg-8">
+        <!--link card goes here-->
+        {% for each in link_cards %}
+            <div class="col-12 col-md-12 col-lg-12" style="margin-bottom: 10%;">
+                <h5><b><a href={{each.link}}>{{each.title}} <i class="fas fa-arrow-right"></i></a></b></h5>
+                <p>
+                    {{each.description}}
+                </p>
+                <div>
+                    {% for each_tag in each.tags %}
+                        <span class="tags">{{each_tag}}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        
+    </div>
+</div>

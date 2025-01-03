@@ -1,0 +1,154 @@
+h1,h4{
+    font-family: 'Poiret One', cursive;
+}
+
+/* If the screen size is 600px wide or less, set the font-size of <div> to 30px */
+@media screen and (max-width: 600px) {
+    h1 {
+      font-size: 30px;
+    }
+  }
+
+body{
+    font-family: 'Open Sans', sans-serif;
+}
+
+#logo{
+    background-color: yellow;
+    padding: 10rem;
+    border-radius: 100%;
+}
+
+.logo-letter{
+    background-color: yellow;
+    padding: 1%;
+    border-radius: 100%;
+    color: crimson;
+    font-weight: bolder;
+}
+
+#dev{
+    background-color: white; 
+    border-radius: 3em; 
+    padding: 0 0.5em 0 0.5em;
+    box-shadow: 0 0 10px;
+}
+
+#aca{
+    font-style: italic;
+    background-color: black;
+    padding: 0.08em;
+    color: white;
+}
+
+#sc{
+    background-color: yellowgreen;
+    padding: 1.5rem;
+    border-radius: 50%;
+    opacity: 60%;
+    font-weight: bold;
+}
+
+#gd{
+    background-color: violet;
+    padding: 0.8rem;
+    border-radius: 100%;
+    opacity: 60%;
+    font-weight: bold;
+}
+
+#mon{
+    color: rgb(0,105,182);
+    font-weight: bold;   
+}
+
+#mit{
+    font-family: 'Press Start 2P', cursive;
+}
+
+#ios{
+    background: rgb(34,193,195);
+    background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(246,107,251,1) 100%);
+    background-color: #17234E;
+    border-radius: 3em; 
+    padding: 0.2em;
+    font-weight: bold;
+    color: rgb(54, 53, 50);
+}
+
+#green{
+    color: white;
+    background-color: green;
+    padding: 0.1em;
+}
+
+.game{
+    margin-top: 0.5em;
+    width: 25%;
+    padding: 0.1em 0.3em 0.1em 0.3em;
+    border-radius: 20px;
+    background-color: white;
+    border-color: #555555;
+    color: #555555;
+    border: 0.2em dashed #555555;
+    font-weight: bold;
+    opacity: 80%;
+}
+
+#anti{
+    margin-top: 0.5em;
+    border-radius: 20px;
+    background-color: white;
+    border-color: pink;
+    color: pink;
+    border: 0.2em dashed pink;
+    font-weight: bold;
+    opacity: 80%;
+}
+
+.custom-p{
+    margin: 5em 0 5em 0;
+}
+
+.tags{
+    background-color: silver;
+    border-radius: 20px;
+    padding: 0.5em;
+    display: inline-block;
+    margin: 0.3em;
+}
+
+.custom-p-tags{
+    margin: 5em 0 5em 0;
+}
+
+.custom-img{
+    margin: 0.5em;
+    width: 100%;
+}
+
+.a-custom{
+    text-decoration: none;
+    color: rgb(99, 102, 96);
+    margin: 0.6em;
+}
+
+.a-custom:hover{
+    color: black;
+    border-bottom: 1px solid black;
+}
+
+.a-page{
+    color: rgb(99, 102, 96);
+    border-bottom: 1px solid  rgb(99, 102, 96);
+}
+
+.a-page:hover{
+    color: black;
+    text-decoration: none;
+}
+
+.bg-div{
+    background-color: #EFEDE6;
+}
+
