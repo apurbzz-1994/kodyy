@@ -18,7 +18,7 @@ class PagesApi:
     def __create_objects_from_page_data(self, api_response):
         page_objects = []
         for each_page in api_response:
-            p_category = each_page['properties']['category']['select']['name']
+            p_category = each_page['properties']['category']['select']['name'].upper()
             p_title = each_page['properties']['title']['title'][0]['text']['content']
             p_description = each_page['properties']['description']['rich_text'][0]['text']['content']
             p_archieved = each_page['properties']['archieved']['checkbox']
