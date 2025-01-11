@@ -37,14 +37,18 @@ class PagesApi:
                 to_append = f"{each_part["plain_text"]}"
                 styles = each_part['annotations']
 
-                if styles['bold']:
-                    to_append = f"<b>{to_append}</b>"
-                if styles['italic']:
-                    to_append = f"<i>{to_append}</i>"
-                if styles['strikethrough']:
-                    to_append = f"<s>{to_append}</s>"
-                if styles['underline']:
-                    to_append = f"<u>{to_append}</u>"
+                #checking to see if a href is associated with a text block
+                if each_part['href'] != None:
+                    to_append = f"<a href='{each_part['href']}' class='a-page'>{to_append}</a>"
+                else:
+                    if styles['bold']:
+                        to_append = f"<b>{to_append}</b>"
+                    if styles['italic']:
+                        to_append = f"<i>{to_append}</i>"
+                    if styles['strikethrough']:
+                        to_append = f"<s>{to_append}</s>"
+                    if styles['underline']:
+                        to_append = f"<u>{to_append}</u>"
 
                 html_to_render += to_append
             html_to_render += "</p>"
