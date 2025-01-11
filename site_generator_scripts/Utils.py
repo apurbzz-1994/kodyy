@@ -8,7 +8,7 @@ class Utils:
     def send_get_request_to_notion(self, endpoint_url):
         requested_response = None
         try:
-            response = requests.post(endpoint_url, headers=self.headers)
+            response = requests.get(endpoint_url, headers=self.headers)
             requested_response = response.json()
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
