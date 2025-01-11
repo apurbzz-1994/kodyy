@@ -54,9 +54,28 @@ class PagesApi:
             html_to_render += "</p>"
         return html_to_render
 
+    def __render_image_elements(self, notion_block, p_title):
+        image_url = notion_block[notion_block['type']]['file']['url']
+        filename_prefix = p_title.lower().replace(" ", "_")
+        filename = f"{filename_prefix}_{notion_block['id']}"
+        filepath = f"../output/{filename}.png"
+        html_to_render = ""
+
+
+        #use the requests library to download the image
+        image_response = requests.get(image_url)
+        if image_response.status_code == 200:
+            with open(filepath, "wb") as file:
+                file.write(image_response.content)
+        else:
+            print("Image file save error")
+
+        html_to_render += f"<img src = '{filename}.png' class='img-fluid custom-img'>"
+        return html_to_render
+
     
     
-    def __get_page_content_from_database(self, page_id):
+    def __get_page_content_from_database(self, page_id, p_title):
         page_content = ""
         endpoint = f"https://api.notion.com/v1/blocks/{page_id}/children"
 
@@ -74,6 +93,9 @@ class PagesApi:
                 elif "paragraph" in each_block['type']:
                     paragraph_html = self.__render_paragraph_elements(each_block)
                     page_content += paragraph_html
+                elif "image" in each_block['type']:
+                    image_html = self.__render_image_elements(each_block, p_title)
+                    page_content+= image_html
                 else:
                     page_content += ""
              
@@ -82,8 +104,6 @@ class PagesApi:
 
         return page_content
 
-
-    
     
     def __create_objects_from_page_data(self, api_response):
         page_objects = []
@@ -96,7 +116,7 @@ class PagesApi:
             p_timeline = each_page['properties']['timeline']['number']
 
             p_id = each_page['id']
-            p_content = self.__get_page_content_from_database(p_id)
+            p_content = self.__get_page_content_from_database(p_id, p_title)
 
             p_obj = Page(p_category, p_title, p_description, p_archieved, content=p_content, last_updated=p_last_updated, timeline=p_timeline)
 

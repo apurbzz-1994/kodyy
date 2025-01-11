@@ -38,6 +38,13 @@ for each_page in all_pages:
         with open(f'{output_directory}/{dir_name}.html', 'w') as f:
             f.write(readme_file_output)
 
+        # check to see if there are images associated with the page in the folder
+        # if yes, then move them all into the folder
+        for each in os.listdir("../output"):
+            if each.endswith('.png') and dir_name in each:
+                os.replace(f'../output/{each}', f'{output_directory}/{each}')
+
+
         each_page.readmore_page_link = f"{dir_name}/{dir_name}.html"
 
 # Define the data to inject
