@@ -42,7 +42,8 @@ for each_page in all_pages:
         # if yes, then move them all into the folder
         for each in os.listdir("../output"):
             if each.endswith('.png') and dir_name in each:
-                os.replace(f'../output/{each}', f'{output_directory}/{each}')
+                if "_cover" not in each:
+                    os.replace(f'../output/{each}', f'{output_directory}/{each}')
 
 
         each_page.readmore_page_link = f"{dir_name}/{dir_name}.html"

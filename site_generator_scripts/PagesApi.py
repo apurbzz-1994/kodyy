@@ -54,6 +54,17 @@ class PagesApi:
             html_to_render += "</p>"
         return html_to_render
 
+    
+    def __download_image_from_notion(self, image_url, save_file_path):
+        image_response = requests.get(image_url)
+        if image_response.status_code == 200:
+            with open(save_file_path, "wb") as file:
+                file.write(image_response.content)
+        else:
+            print("Image file save error")
+
+    
+    
     def __render_image_elements(self, notion_block, p_title):
         image_url = notion_block[notion_block['type']]['file']['url']
         filename_prefix = p_title.lower().replace(" ", "_")
@@ -61,14 +72,8 @@ class PagesApi:
         filepath = f"../output/{filename}.png"
         html_to_render = ""
 
-
         #use the requests library to download the image
-        image_response = requests.get(image_url)
-        if image_response.status_code == 200:
-            with open(filepath, "wb") as file:
-                file.write(image_response.content)
-        else:
-            print("Image file save error")
+        self.__download_image_from_notion(image_url, filepath)
 
         html_to_render += f"<img src = '{filename}.png' class='img-fluid custom-img'>"
         return html_to_render
@@ -118,7 +123,20 @@ class PagesApi:
             p_id = each_page['id']
             p_content = self.__get_page_content_from_database(p_id, p_title)
 
-            p_obj = Page(p_category, p_title, p_description, p_archieved, content=p_content, last_updated=p_last_updated, timeline=p_timeline)
+            #accounting for cover images
+            cover_image_file_data = each_page['properties']['cover_image']['files']
+            cover_image = None
+
+            if len(cover_image_file_data) != 0:
+                # this means a cover image is available
+                cover_image_link = cover_image_file_data[0]['file']['url']
+                #setting path with imagefilename
+                image_local_path = f"../output/{p_title.lower().replace(" ", "_")}_cover.png"
+                #download image
+                self.__download_image_from_notion(cover_image_link, image_local_path)
+                cover_image = f"{p_title.lower().replace(" ", "_")}_cover.png"
+
+            p_obj = Page(p_category, p_title, p_description, p_archieved, content=p_content, last_updated=p_last_updated, timeline=p_timeline, cover_image=cover_image)
 
             page_objects.append(p_obj)
         return page_objects
