@@ -30,9 +30,10 @@
     <!--Navbar end-->
     <div class = "container">
         <div class="row" style="margin: 5% 10% 0% 10%">
-            <!--generated content goes here-->
+            <div class = "col-12 col-md-12 col-lg-12">
+                {{content|safe}}
+            </div>
         </div>   
-
     </div>
    <!--footer-->
    {% include 'footer.html' %}

@@ -37,6 +37,7 @@ class PagesApi:
             for each_part in p_rich_text:
                 to_append = f"{each_part["plain_text"]}"
                 html_to_render += to_append
+            html_to_render += "</p>"
         return html_to_render
 
     

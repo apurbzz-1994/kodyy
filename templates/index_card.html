@@ -11,9 +11,10 @@
                     <p>
                         {{each.description}}
                     </p>
-                    <p>
-                        {{each.content|safe}}
-                    </p>
+                    <!--rendering links where applicable-->
+                    {%if each.readmore_page_link%}
+                        <a href="{{ each.readmore_page_link }}" class="a-custom"><h5>Read More <i class="fas fa-arrow-right"></i></h5></a>
+                    {% endif %}
                 </div>
             </div>
         </div>
