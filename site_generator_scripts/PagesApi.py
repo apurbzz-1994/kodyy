@@ -33,9 +33,19 @@ class PagesApi:
         else:
             html_to_render += "<p>"
             #going through each block in rich-text, as there can be multiple strings with different styles
-            #NOTE: Need to consider annotation styles and links later as well
             for each_part in p_rich_text:
                 to_append = f"{each_part["plain_text"]}"
+                styles = each_part['annotations']
+
+                if styles['bold']:
+                    to_append = f"<b>{to_append}</b>"
+                if styles['italic']:
+                    to_append = f"<i>{to_append}</i>"
+                if styles['strikethrough']:
+                    to_append = f"<s>{to_append}</s>"
+                if styles['underline']:
+                    to_append = f"<u>{to_append}</u>"
+
                 html_to_render += to_append
             html_to_render += "</p>"
         return html_to_render
