@@ -29,7 +29,7 @@ class PagesApi:
         p_rich_text = notion_block[notion_block['type']]['rich_text']
         #check to see if there is an empty paragraph
         if len(p_rich_text) == 0:
-            html_to_render += f"<p> </p>"
+            html_to_render += f"<br/>"
         else:
             html_to_render += "<p>"
             #going through each block in rich-text, as there can be multiple strings with different styles
