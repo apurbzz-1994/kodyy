@@ -1,5 +1,6 @@
 from jinja2 import Environment, FileSystemLoader
 from PagesApi import *
+from LinksApi import *
 from dotenv import load_dotenv
 import os
 import argparse
@@ -7,6 +8,7 @@ import argparse
 load_dotenv()
 NOTION_TOKEN = os.getenv("NOTION_SECRET")
 DB_ID = os.getenv("MAIN_DB_ID")
+LINK_DB_ID = os.getenv("LINK_DB_ID")
 
 
 def generate_templates():
@@ -22,8 +24,13 @@ def generate_templates():
     #template for read more pages
     template_read_more = env.get_template('readmore_page_template.html')
 
+    #grabbing pages from the database
     p_api = PagesApi(NOTION_TOKEN, DB_ID)
     all_pages = p_api.get_all_pages_from_database()
+
+    #grabbing links from the database
+    l_api = LinksApi(NOTION_TOKEN, LINK_DB_ID)
+    all_links = l_api.get_all_links_from_database()
 
     #create necessary html files for 'read more' pages
     for each_page in all_pages:
@@ -55,7 +62,8 @@ def generate_templates():
             each_page.readmore_page_link = f"{dir_name}/{dir_name}.html"
     # Define the data to inject
     data = {
-        'homepage_cards': all_pages
+        'homepage_cards': all_pages,
+        'homepage_links': all_links
 
     }
 

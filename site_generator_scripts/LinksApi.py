@@ -20,7 +20,7 @@ class LinksApi:
             l_properties = each_link['properties']
             l_title = l_properties['title']['title'][0]['plain_text']
             l_link = l_properties['link']['url']
-            l_description = l_properties['description']['rich-text'][0]['plain_text']
+            l_description = l_properties['description']['rich_text'][0]['plain_text']
             l_tags = []
 
             #loading tags
