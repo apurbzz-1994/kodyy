@@ -114,8 +114,8 @@ class PagesApi:
         page_objects = []
         for each_page in api_response:
             p_category = each_page['properties']['category']['select']['name'].upper()
-            p_title = each_page['properties']['title']['title'][0]['text']['content']
-            p_description = each_page['properties']['description']['rich_text'][0]['text']['content']
+            p_title = each_page['properties']['title']['title'][0]['plain_text']
+            p_description = each_page['properties']['description']['rich_text'][0]['plain_text']
             p_archieved = each_page['properties']['archieved']['checkbox']
             p_last_updated = each_page['last_edited_time']
             p_timeline = each_page['properties']['timeline']['number']
