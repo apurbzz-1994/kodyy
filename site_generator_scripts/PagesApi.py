@@ -143,30 +143,8 @@ class PagesApi:
     
     
     
-    
     def get_all_pages_from_database(self):
-        results = None
-        payload = {
-            'page_size': 100
-        }
+       all_pages = self.util.get_all_rows_from_database(self.query_pages_endpoint, self.__create_objects_from_page_data)
 
-        pages_data = self.util.send_post_request_to_notion(self.query_pages_endpoint, payload)
-
-        if pages_data['object'] != 'error':
-            all_pages = pages_data['results']
-
-            while pages_data['has_more'] and pages_data['next_cursor'] != 'null':
-                next_payload = {
-                    'page_size': 100,
-                    'start_cursor': pages_data['next_cursor']
-                }
-                next_pages_data = self.util.send_post_request_to_notion(self.query_pages_endpoint, next_payload)
-                all_pages.extend(next_pages_data['results'])
-            
-            #creating page objects
-            all_page_objs = self.__create_objects_from_page_data(all_pages)
-
-            results = all_page_objs
-        
-        return results
+       return all_pages
 

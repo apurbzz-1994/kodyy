@@ -29,6 +29,33 @@ class Utils:
             print(e)
         finally:
             return requested_response
+        
+    
+    def get_all_rows_from_database(self, query_db_enpoint, obj_create_func):
+        results = None
+        payload = {
+            'page_size': 100
+        }
+
+        pages_data = self.send_post_request_to_notion(query_db_enpoint, payload)
+
+        if pages_data['object'] != 'error':
+            all_pages = pages_data['results']
+
+            while pages_data['has_more'] and pages_data['next_cursor'] != 'null':
+                next_payload = {
+                    'page_size': 100,
+                    'start_cursor': pages_data['next_cursor']
+                }
+                next_pages_data = self.send_post_request_to_notion(query_db_enpoint, next_payload)
+                all_pages.extend(next_pages_data['results'])
+            
+            #creating page objects
+            all_page_objs = obj_create_func(all_pages)
+
+            results = all_page_objs
+        
+        return results
 
         
 
