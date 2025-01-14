@@ -31,11 +31,17 @@ class Utils:
             return requested_response
         
     
-    def get_all_rows_from_database(self, query_db_enpoint, obj_create_func):
+    def get_all_rows_from_database(self, query_db_enpoint, obj_create_func, filter = None):
         results = None
         payload = {
             'page_size': 100
         }
+
+        #adding filters, if available 
+        if filter != None:
+            if filter:
+                payload["filter"] = filter
+
 
         pages_data = self.send_post_request_to_notion(query_db_enpoint, payload)
 

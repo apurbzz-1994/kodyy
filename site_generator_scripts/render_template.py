@@ -11,6 +11,35 @@ DB_ID = os.getenv("MAIN_DB_ID")
 LINK_DB_ID = os.getenv("LINK_DB_ID")
 
 
+def render_readmore_page(each_page, template_read_more):
+#render template with data
+    readme_page_data = {
+        'content': each_page.content
+    }
+    readme_file_output = template_read_more.render(readme_page_data)
+
+    #create new folder 
+    dir_name = each_page.title.lower().replace(" ", "_")
+    output_directory = f"../output/{dir_name}"
+    os.mkdir(output_directory)
+
+    #add page to folder
+    with open(f'{output_directory}/{dir_name}.html', 'w') as f:
+        f.write(readme_file_output)
+
+    # check to see if there are images associated with the page in the folder
+    # if yes, then move them all into the folder
+    for each in os.listdir("../output"):
+        if each.endswith('.png') and dir_name in each:
+            if "_cover" not in each:
+                os.replace(f'../output/{each}', f'{output_directory}/{each}')
+
+    each_page.readmore_page_link = f"{dir_name}/{dir_name}.html"
+
+
+
+
+
 def generate_templates():
 
     print("Grabbing content from Notion database and creating templates......")
@@ -26,40 +55,17 @@ def generate_templates():
 
     #grabbing pages from the database
     p_api = PagesApi(NOTION_TOKEN, DB_ID)
-    all_pages = p_api.get_all_pages_from_database()
+    all_pages = p_api.get_all_pages_from_database(category_filter="Experience", archieved_filter=True)
 
     #grabbing links from the database
     l_api = LinksApi(NOTION_TOKEN, LINK_DB_ID)
     all_links = l_api.get_all_links_from_database()
 
-    #create necessary html files for 'read more' pages
+    #create necessary html files for 'read more' page and render archived content
     for each_page in all_pages:
         #if page has content
         if each_page.content != None:
-            #render template with data
-            readme_page_data = {
-                'content': each_page.content
-            }
-            readme_file_output = template_read_more.render(readme_page_data)
-
-            #create new folder 
-            dir_name = each_page.title.lower().replace(" ", "_")
-            output_directory = f"../output/{dir_name}"
-            os.mkdir(output_directory)
-
-            #add page to folder
-            with open(f'{output_directory}/{dir_name}.html', 'w') as f:
-                f.write(readme_file_output)
-
-            # check to see if there are images associated with the page in the folder
-            # if yes, then move them all into the folder
-            for each in os.listdir("../output"):
-                if each.endswith('.png') and dir_name in each:
-                    if "_cover" not in each:
-                        os.replace(f'../output/{each}', f'{output_directory}/{each}')
-
-
-            each_page.readmore_page_link = f"{dir_name}/{dir_name}.html"
+           render_readmore_page(each_page, template_read_more)
     # Define the data to inject
     data = {
         'homepage_cards': all_pages,

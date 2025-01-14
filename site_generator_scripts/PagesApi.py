@@ -143,8 +143,39 @@ class PagesApi:
     
     
     
-    def get_all_pages_from_database(self):
-       all_pages = self.util.get_all_rows_from_database(self.query_pages_endpoint, self.__create_objects_from_page_data)
+    def get_all_pages_from_database(self, archieved_filter = None, category_filter = None):
+        filter = {}
 
-       return all_pages
+        #preparing filters
+        #need a better way to handle this in the future
+        if archieved_filter != None and category_filter == None:
+            filter['property'] = "archieved"
+            filter['checkbox'] = {"equals": archieved_filter}
+        elif archieved_filter == None and category_filter != None:
+            filter['property'] = "category"
+            filter['select'] = {"equals": category_filter}
+        elif archieved_filter != None and category_filter != None:
+            filter['and'] = [
+                {
+                    'property': "archieved", 
+                    'checkbox': {"equals": archieved_filter}
+                }, 
+
+                {
+                    "property": "category",
+                    'select': {"equals": category_filter}
+                }
+            ]
+        else:
+            filter = {}
+            
+
+        all_pages = self.util.get_all_rows_from_database(self.query_pages_endpoint, self.__create_objects_from_page_data, filter)
+
+        return all_pages
+
+      
+           
+
+       
 
