@@ -37,6 +37,24 @@ def render_readmore_page(each_page, template_read_more):
     each_page.readmore_page_link = f"{dir_name}/{dir_name}.html"
 
 
+def procure_data_to_inject(primary_page_template, rm_page_template, data_dict, arch_filter = None, cat_filter = None):
+    #grabbing pages from the database
+    p_api = PagesApi(NOTION_TOKEN, DB_ID)
+    all_pages = p_api.get_all_pages_from_database(archieved_filter=arch_filter, category_filter=cat_filter)
+
+    #create necessary html files for 'read more' page and render archived content
+    for each_page in all_pages:
+        #if page has content
+        if each_page.content != None:
+           render_readmore_page(each_page, rm_page_template)
+    
+     # Define the data to inject
+    data_dict['homepage_cards'] = all_pages
+    
+    # Render the template with the data
+    output = primary_page_template.render(data_dict)
+
+    return output
 
 
 
@@ -53,32 +71,22 @@ def generate_templates():
     #template for read more pages
     template_read_more = env.get_template('readmore_page_template.html')
 
-    #grabbing pages from the database
-    p_api = PagesApi(NOTION_TOKEN, DB_ID)
-    all_pages = p_api.get_all_pages_from_database(category_filter="Experience", archieved_filter=True)
-
     #grabbing links from the database
     l_api = LinksApi(NOTION_TOKEN, LINK_DB_ID)
     all_links = l_api.get_all_links_from_database()
 
-    #create necessary html files for 'read more' page and render archived content
-    for each_page in all_pages:
-        #if page has content
-        if each_page.content != None:
-           render_readmore_page(each_page, template_read_more)
     # Define the data to inject
-    data = {
-        'homepage_cards': all_pages,
+    data_index_page = {
+        'homepage_cards': None,
         'homepage_links': all_links
 
     }
-
     # Render the template with the data
-    output = template.render(data)
+    output_index_page = procure_data_to_inject(template, template_read_more, data_index_page)
 
     # Save or print the rendered HTML
     with open('../output/index.html', 'w') as f:
-        f.write(output)
+        f.write(output_index_page)
 
     print("Templates created! Please check your output folder")
 
