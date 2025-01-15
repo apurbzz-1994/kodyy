@@ -37,22 +37,24 @@ def render_readmore_page(each_page, template_read_more):
     each_page.readmore_page_link = f"{dir_name}/{dir_name}.html"
 
 
-def procure_data_to_inject(primary_page_template, rm_page_template, data_dict, arch_filter = None, cat_filter = None):
+def procure_render_to_template(primary_page_template, rm_page_template, data_dict, arch_filter = None, cat_filter = None):
+    output = None
     #grabbing pages from the database
     p_api = PagesApi(NOTION_TOKEN, DB_ID)
     all_pages = p_api.get_all_pages_from_database(archieved_filter=arch_filter, category_filter=cat_filter)
 
-    #create necessary html files for 'read more' page and render archived content
-    for each_page in all_pages:
-        #if page has content
-        if each_page.content != None:
-           render_readmore_page(each_page, rm_page_template)
-    
-     # Define the data to inject
-    data_dict['homepage_cards'] = all_pages
-    
-    # Render the template with the data
-    output = primary_page_template.render(data_dict)
+    if len(all_pages) != 0:
+        #create necessary html files for 'read more' page and render archived content
+        for each_page in all_pages:
+            #if page has content
+            if each_page.content != None:
+                render_readmore_page(each_page, rm_page_template)
+        
+        # Define the data to inject
+        data_dict['homepage_cards'] = all_pages
+        
+        # Render the template with the data
+        output = primary_page_template.render(data_dict)
 
     return output
 
@@ -71,22 +73,43 @@ def generate_templates():
     #template for read more pages
     template_read_more = env.get_template('readmore_page_template.html')
 
+    #template for archieved page
+    template_archieved = env.get_template('archieved_template.html')
+
     #grabbing links from the database
     l_api = LinksApi(NOTION_TOKEN, LINK_DB_ID)
     all_links = l_api.get_all_links_from_database()
 
-    # Define the data to inject
+
+    data_archieved_page = {
+        'homepage_cards': None
+    }
+
+    #render archieved page
+    output_archieved_page = procure_render_to_template(template_archieved, template_read_more, data_archieved_page, arch_filter=True) 
+
+     # Define the data to inject
     data_index_page = {
         'homepage_cards': None,
-        'homepage_links': all_links
+        'homepage_links': all_links,
+        'archive_link': True
 
     }
-    # Render the template with the data
-    output_index_page = procure_data_to_inject(template, template_read_more, data_index_page)
+    #if no archived pages are available (filtered output returns no result)
+    if output_archieved_page == None:
+        data_index_page['archive_link'] = False
+    else:
+        #create archived page
+        with open('../output/archieved.html', 'w') as f:
+            f.write(output_archieved_page)
+
+    #render the template with the data
+    output_index_page = procure_render_to_template(template, template_read_more, data_index_page, arch_filter=False)
 
     # Save or print the rendered HTML
     with open('../output/index.html', 'w') as f:
         f.write(output_index_page)
+
 
     print("Templates created! Please check your output folder")
 
