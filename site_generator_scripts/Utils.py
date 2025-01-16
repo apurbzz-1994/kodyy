@@ -31,7 +31,7 @@ class Utils:
             return requested_response
         
     
-    def get_all_rows_from_database(self, query_db_enpoint, obj_create_func, filter = None):
+    def get_all_rows_from_database(self, query_db_enpoint, obj_create_func, filter = None, sort = None):
         results = None
         payload = {
             'page_size': 100
@@ -41,6 +41,9 @@ class Utils:
         if filter != None:
             if filter:
                 payload["filter"] = filter
+        if sort != None:
+            if sort:
+                payload['sorts'] = sort
 
 
         pages_data = self.send_post_request_to_notion(query_db_enpoint, payload)

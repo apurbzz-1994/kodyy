@@ -37,11 +37,11 @@ def render_readmore_page(each_page, template_read_more):
     each_page.readmore_page_link = f"{dir_name}/{dir_name}.html"
 
 
-def procure_render_to_template(primary_page_template, rm_page_template, data_dict, arch_filter = None, cat_filter = None):
+def procure_render_to_template(primary_page_template, rm_page_template, data_dict, arch_filter = None, cat_filter = None, sort = None):
     output = None
     #grabbing pages from the database
     p_api = PagesApi(NOTION_TOKEN, DB_ID)
-    all_pages = p_api.get_all_pages_from_database(archieved_filter=arch_filter, category_filter=cat_filter)
+    all_pages = p_api.get_all_pages_from_database(archieved_filter=arch_filter, category_filter=cat_filter, sort_by_year=sort)
 
     if len(all_pages) != 0:
         #create necessary html files for 'read more' page and render archived content
@@ -86,7 +86,7 @@ def generate_templates():
     }
 
     #render archieved page
-    output_archieved_page = procure_render_to_template(template_archieved, template_read_more, data_archieved_page, arch_filter=True) 
+    output_archieved_page = procure_render_to_template(template_archieved, template_read_more, data_archieved_page, arch_filter=True, sort=True) 
 
      # Define the data to inject
     data_index_page = {
@@ -104,7 +104,7 @@ def generate_templates():
             f.write(output_archieved_page)
 
     #render the template with the data
-    output_index_page = procure_render_to_template(template, template_read_more, data_index_page, arch_filter=False)
+    output_index_page = procure_render_to_template(template, template_read_more, data_index_page, arch_filter=False, sort=True)
 
     # Save or print the rendered HTML
     with open('../output/index.html', 'w') as f:

@@ -143,8 +143,9 @@ class PagesApi:
     
     
     
-    def get_all_pages_from_database(self, archieved_filter = None, category_filter = None):
+    def get_all_pages_from_database(self, archieved_filter = None, category_filter = None, sort_by_year = None):
         filter = {}
+        sort = []
 
         #preparing filters
         #need a better way to handle this in the future
@@ -168,9 +169,15 @@ class PagesApi:
             ]
         else:
             filter = {}
-            
 
-        all_pages = self.util.get_all_rows_from_database(self.query_pages_endpoint, self.__create_objects_from_page_data, filter)
+        #adding sorting by year
+        if sort_by_year == True:
+            sort.append({
+                'property': 'timeline',
+                'direction': 'descending'
+            })
+
+        all_pages = self.util.get_all_rows_from_database(self.query_pages_endpoint, self.__create_objects_from_page_data, filter, sort)
 
         return all_pages
 
