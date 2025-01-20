@@ -56,6 +56,13 @@ class Utils:
                     'page_size': 100,
                     'start_cursor': pages_data['next_cursor']
                 }
+                #adding filters, if available 
+                if filter != None:
+                    if filter:
+                        next_payload["filter"] = filter
+                if sort != None:
+                    if sort:
+                        next_payload['sorts'] = sort
                 next_pages_data = self.send_post_request_to_notion(query_db_enpoint, next_payload)
                 all_pages.extend(next_pages_data['results'])
             

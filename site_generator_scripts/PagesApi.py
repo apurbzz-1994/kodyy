@@ -147,28 +147,65 @@ class PagesApi:
         filter = {}
         sort = []
 
-        #preparing filters
-        #need a better way to handle this in the future
-        if archieved_filter != None and category_filter == None:
-            filter['property'] = "archieved"
-            filter['checkbox'] = {"equals": archieved_filter}
-        elif archieved_filter == None and category_filter != None:
-            filter['property'] = "category"
-            filter['select'] = {"equals": category_filter}
-        elif archieved_filter != None and category_filter != None:
-            filter['and'] = [
-                {
-                    'property': "archieved", 
-                    'checkbox': {"equals": archieved_filter}
-                }, 
-
-                {
-                    "property": "category",
-                    'select': {"equals": category_filter}
+        #better refactored code            
+        if archieved_filter is not None or category_filter is not None:
+            if archieved_filter is not None:
+                archieved_condition =  {
+                'property': "archieved",
+                'checkbox': {"equals": archieved_filter}
                 }
-            ]
-        else:
-            filter = {}
+            if category_filter is not None:
+                #accounting for multiple categories
+                categories = category_filter.split(',')
+
+                if len(categories) == 1:
+                    categories_condition = {
+                        "property": "category",
+                        'select':  {"equals": categories[0]}
+                    }
+                else:
+                    categories_condition = {
+                        "or": []
+                    }
+
+                    for each_category in categories:
+                        categories_condition["or"].append(
+                            {   
+                                "property": "category",
+                                'select':  {"equals": each_category}
+                            }
+                        )
+            if archieved_filter is not None and category_filter is not None:
+                filter['and'] = [archieved_condition, categories_condition]
+            else:
+                filter = archieved_condition if archieved_filter is not None else categories_condition
+            
+       
+        # #========================================================
+        # # need to change the conditions here
+
+        # #preparing filters
+        # #need a better way to handle this in the future
+        # if archieved_filter != None and category_filter == None:
+        #     filter['property'] = "archieved"
+        #     filter['checkbox'] = {"equals": archieved_filter}
+        # elif archieved_filter == None and category_filter != None:
+        #     filter['property'] = "category"
+        #     filter['select'] = {"equals": category_filter}
+        # elif archieved_filter != None and category_filter != None:
+        #     filter['and'] = [
+        #         {
+        #             'property': "archieved", 
+        #             'checkbox': {"equals": archieved_filter}
+        #         }, 
+
+        #         {
+        #             "property": "category",
+        #             'select': {"equals": category_filter}
+        #         }
+        #     ]
+        # else:
+        #     filter = {}
 
         #adding sorting by year
         if sort_by_year == True:
