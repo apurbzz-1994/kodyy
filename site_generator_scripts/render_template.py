@@ -12,14 +12,18 @@ LINK_DB_ID = os.getenv("LINK_DB_ID")
 
 
 def render_readmore_page(each_page, template_read_more):
-#render template with data
+
+    #filesystem related 
+    dir_name = each_page.title.lower().replace(" ", "_")
+    each_page.readmore_page_link = f"{dir_name}/{dir_name}.html"
+
+    #render template with data
     readme_page_data = {
-        'content': each_page.content
+        'pagedata': each_page
     }
     readme_file_output = template_read_more.render(readme_page_data)
 
     #create new folder 
-    dir_name = each_page.title.lower().replace(" ", "_")
     output_directory = f"../output/{dir_name}"
     os.mkdir(output_directory)
 
@@ -33,8 +37,6 @@ def render_readmore_page(each_page, template_read_more):
         if each.endswith('.png') and dir_name in each:
             if "_cover" not in each:
                 os.replace(f'../output/{each}', f'{output_directory}/{each}')
-
-    each_page.readmore_page_link = f"{dir_name}/{dir_name}.html"
 
 
 def procure_render_to_template(primary_page_template, rm_page_template, data_dict, arch_filter = None, cat_filter = None, sort = None, page_blocks = None):
@@ -94,7 +96,8 @@ def generate_templates():
 
 
     data_archieved_page = {
-        'homepage_cards': None
+        'homepage_cards': None,
+        'show_timestamp': True,
     }
 
     #render archieved page
@@ -104,6 +107,7 @@ def generate_templates():
     data_index_page = {
         'homepage_cards': None,
         'homepage_links': all_links,
+        'show_timestamp': True,
         'archive_link': True
 
     }
@@ -114,6 +118,7 @@ def generate_templates():
         #create archived page
         with open('../output/archieved.html', 'w') as f:
             f.write(output_archieved_page)
+
 
     #render the template with the data
     output_index_page = procure_render_to_template(template, template_read_more, data_index_page, arch_filter=False, sort=True, cat_filter="Experience,Project", page_blocks="homepage_block")
