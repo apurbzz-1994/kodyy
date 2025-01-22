@@ -37,8 +37,9 @@ def render_readmore_page(each_page, template_read_more):
     each_page.readmore_page_link = f"{dir_name}/{dir_name}.html"
 
 
-def procure_render_to_template(primary_page_template, rm_page_template, data_dict, arch_filter = None, cat_filter = None, sort = None):
+def procure_render_to_template(primary_page_template, rm_page_template, data_dict, arch_filter = None, cat_filter = None, sort = None, page_blocks = None):
     output = None
+
     #grabbing pages from the database
     p_api = PagesApi(NOTION_TOKEN, DB_ID)
     all_pages = p_api.get_all_pages_from_database(archieved_filter=arch_filter, category_filter=cat_filter, sort_by_year=sort)
@@ -52,10 +53,21 @@ def procure_render_to_template(primary_page_template, rm_page_template, data_dic
         
         # Define the data to inject
         data_dict['homepage_cards'] = all_pages
+
+        #accounting for any page blocks load
+        if page_blocks is not None:
+            blocks = page_blocks.split(",")
+            for each_block in blocks:
+                #get the page object from the database
+                fetched_block = p_api.get_all_pages_from_database(category_filter=each_block)
+
+                #add the block to the data dict 
+                if len(fetched_block)!= 0:
+                    data_dict[f'{each_block}'] = fetched_block[0]
         
         # Render the template with the data
         output = primary_page_template.render(data_dict)
-
+    
     return output
 
 
@@ -104,7 +116,7 @@ def generate_templates():
             f.write(output_archieved_page)
 
     #render the template with the data
-    output_index_page = procure_render_to_template(template, template_read_more, data_index_page, arch_filter=False, sort=True, cat_filter="!homepage-block")
+    output_index_page = procure_render_to_template(template, template_read_more, data_index_page, arch_filter=False, sort=True, cat_filter="Experience,Project", page_blocks="homepage_block")
 
     # Save or print the rendered HTML
     with open('../output/index.html', 'w') as f:
