@@ -19,7 +19,8 @@ def render_readmore_page(each_page, template_read_more):
 
     #render template with data
     readme_page_data = {
-        'pagedata': each_page
+        'pagedata': each_page,
+        'show_timestamp': True
     }
     readme_file_output = template_read_more.render(readme_page_data)
 
@@ -96,8 +97,7 @@ def generate_templates():
 
 
     data_archieved_page = {
-        'homepage_cards': None,
-        'show_timestamp': True,
+        'homepage_cards': None
     }
 
     #render archieved page
@@ -107,7 +107,6 @@ def generate_templates():
     data_index_page = {
         'homepage_cards': None,
         'homepage_links': all_links,
-        'show_timestamp': True,
         'archive_link': True
 
     }

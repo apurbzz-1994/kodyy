@@ -1,5 +1,6 @@
 from Utils import *
 from Page import *
+from datetime import datetime
 
 class PagesApi:
     def __init__(self, notion_key, db_id):
@@ -117,7 +118,6 @@ class PagesApi:
             p_title = each_page['properties']['title']['title'][0]['plain_text']
             p_description = each_page['properties']['description']['rich_text'][0]['plain_text']
             p_archieved = each_page['properties']['archieved']['checkbox']
-            #need to format the last edited time to a better format
             p_last_updated = each_page['last_edited_time']
             p_timeline = each_page['properties']['timeline']['number']
 
@@ -137,7 +137,15 @@ class PagesApi:
                 self.__download_image_from_notion(cover_image_link, image_local_path)
                 cover_image = f"{p_title.lower().replace(" ", "_")}_cover.png"
 
-            p_obj = Page(p_category, p_title, p_description, p_archieved, content=p_content, last_updated=p_last_updated, timeline=p_timeline, cover_image=cover_image)
+            #formatting time, for ref: T14:54:00.000Z
+            last_updated_obj = datetime.strptime(p_last_updated, "%Y-%m-%dT%H:%M:%S.000Z")
+            system_timezone = datetime.now().astimezone().tzinfo
+            local_time = last_updated_obj.astimezone(system_timezone)
+
+            formatted_last_updated = local_time.strftime("%d-%m-%Y %I:%M%p")
+
+
+            p_obj = Page(p_category, p_title, p_description, p_archieved, content=p_content, last_updated=formatted_last_updated, timeline=p_timeline, cover_image=cover_image)
 
             page_objects.append(p_obj)
         return page_objects
