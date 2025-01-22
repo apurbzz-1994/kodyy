@@ -104,7 +104,7 @@ def generate_templates():
             f.write(output_archieved_page)
 
     #render the template with the data
-    output_index_page = procure_render_to_template(template, template_read_more, data_index_page, arch_filter=False, sort=True)
+    output_index_page = procure_render_to_template(template, template_read_more, data_index_page, arch_filter=False, sort=True, cat_filter="!homepage-block")
 
     # Save or print the rendered HTML
     with open('../output/index.html', 'w') as f:

@@ -164,7 +164,7 @@ class PagesApi:
                     if single_category[0] == "!":
                         categories_condition = {
                             "property": "category",
-                            'select':  {"does_not_equal": single_category}
+                            'select':  {"does_not_equal": single_category[1:]}
                         }
                     else:
                         categories_condition = {
@@ -181,7 +181,7 @@ class PagesApi:
                             categories_condition["or"].append(
                                 {   
                                     "property": "category",
-                                    'select':  {"does_not_equal": each_category}
+                                    'select':  {"does_not_equal": each_category[1:]}
                                 }
                             )
                         else:
