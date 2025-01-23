@@ -1,6 +1,7 @@
 from Utils import *
 from Page import *
 from datetime import datetime
+from dateutil import tz
 
 class PagesApi:
     def __init__(self, notion_key, db_id):
@@ -139,8 +140,9 @@ class PagesApi:
 
             #formatting time, for ref: T14:54:00.000Z
             last_updated_obj = datetime.strptime(p_last_updated, "%Y-%m-%dT%H:%M:%S.000Z")
-            system_timezone = datetime.now().astimezone().tzinfo
-            local_time = last_updated_obj.astimezone(system_timezone)
+            last_updated_obj = last_updated_obj.replace(tzinfo=tz.tzutc())
+            #system_timezone = datetime.now().astimezone().tzinfo
+            local_time = last_updated_obj.astimezone(tz.tzlocal())
 
             formatted_last_updated = local_time.strftime("%d-%m-%Y %I:%M%p")
 
