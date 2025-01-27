@@ -25,14 +25,16 @@ I use this as a quality-of-life tool to render the pages of my portfolio website
 
 5. Run the following commands to execute the `db_create_helper.py` script wihin the `site_generator_scripts` folder to generate each database in Notion with the correct schema. The script takes the parent page ID as a parameter. The page identifier is the 32 character code that can be found at the end of a Notion page URL.
 
-For creating the `Site Pages` database:
-    ```
-    python3 db_create_helper.py pages enter_pageid_here
-    ```
-For creating the `Site Links` database:
-    ```
-    python3 db_create_helper.py links enter_pageid_here
-    ```
+    For creating the `Site Pages` database:
+
+        ```
+        python3 db_create_helper.py pages enter_pageid_here
+        ```
+    For creating the `Site Links` database:
+    
+        ```
+        python3 db_create_helper.py links enter_pageid_here
+        ```
     
 
 6. Once the databases are created, add the database IDs to your .env file. The database identifier is the 32 character code that can be found at the end of a Notion database page url.
