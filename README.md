@@ -33,6 +33,8 @@ For creating the `Site Links` database:
     ```
     python3 db_create_helper.py links enter_pageid_here
     ```
+    
+
 6. Once the databases are created, add the database IDs to your .env file. The database identifier is the 32 character code that can be found at the end of a Notion database page url.
 
 7. To render content, use the following command to execute the `render_template.py` script. This will render html pages in the `output` folder based on the templates and site-generation logic:
