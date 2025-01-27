@@ -23,7 +23,7 @@ I use this as a quality-of-life tool to render the pages of my portfolio website
 
 4. In the `.env` file, `NOTION_SECRET` is your Internal Integration Secret. To generate this, create an Internal Integration from your Notion account here: [Your Notion Interations Dashboard](https://www.notion.so/profile/integrations). More information about how to set this up can be found here - [Install via internal integration token](https://www.notion.com/help/add-and-manage-connections-with-the-api#install-from-a-developer)
 
-5. Run the following commands to execute the `db_create_helper.py` script wihin the `site_generator_scripts` folder to generate each database in Notion with the correct schema. The script takes the parent page ID as a parameter. The page identifier is the 32 character code that can be found at the end of a Notion page URL:
+5. Run the following commands to execute the `db_create_helper.py` script wihin the `site_generator_scripts` folder to generate each database in Notion with the correct schema. The script takes the parent page ID as a parameter. The page identifier is the 32 character code that can be found at the end of a Notion page URL.
 
 For creating the `Site Pages` database:
     ```
@@ -33,7 +33,7 @@ For creating the `Site Links` database:
     ```
     python3 db_create_helper.py links enter_pageid_here
     ```
-6. Once the databases are created, populate with content. 
+6. Once the databases are created, add the database IDs to your .env file. The database identifier is the 32 character code that can be found at the end of a Notion database page url.
 
 7. To render content, use the following command to execute the `render_template.py` script. This will render html pages in the `output` folder based on the templates and site-generation logic:
     ```
