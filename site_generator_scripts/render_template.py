@@ -4,6 +4,7 @@ from LinksApi import *
 from dotenv import load_dotenv
 import os
 import argparse
+import config
 
 load_dotenv()
 NOTION_TOKEN = os.getenv("NOTION_SECRET")
@@ -20,7 +21,7 @@ def render_readmore_page(each_page, template_read_more):
     #render template with data
     readme_page_data = {
         'pagedata': each_page,
-        'show_timestamp': True
+        'show_timestamp': config.show_last_updated_date
     }
     readme_file_output = template_read_more.render(readme_page_data)
 
@@ -101,7 +102,7 @@ def generate_templates():
     }
 
     #render archieved page
-    output_archieved_page = procure_render_to_template(template_archieved, template_read_more, data_archieved_page, arch_filter=True, sort=True) 
+    output_archieved_page = procure_render_to_template(template_archieved, template_read_more, data_archieved_page, arch_filter=True, sort=config.sort_by_year) 
 
      # Define the data to inject
     data_index_page = {
@@ -120,7 +121,7 @@ def generate_templates():
 
 
     #render the template with the data
-    output_index_page = procure_render_to_template(template, template_read_more, data_index_page, arch_filter=False, sort=True, cat_filter="Experience,Project", page_blocks="homepage_block")
+    output_index_page = procure_render_to_template(template, template_read_more, data_index_page, arch_filter=False, sort=config.sort_by_year, cat_filter=config.category_filters, page_blocks=config.homepage_blocks_to_load)
 
     # Save or print the rendered HTML
     with open('../output/index.html', 'w') as f:
