@@ -72,12 +72,18 @@ class PagesApi:
         filename_prefix = p_title.lower().replace(" ", "_")
         filename = f"{filename_prefix}_{notion_block['id']}"
         filepath = f"../output/{filename}.png"
+        alt_text = "Image description not available."
+
+        #check if image caption is available
+        if notion_block[notion_block['type']]['caption']:
+            alt_text = notion_block[notion_block['type']]['caption'][0]['plain_text']
+
         html_to_render = ""
 
         #use the requests library to download the image
         self.__download_image_from_notion(image_url, filepath)
 
-        html_to_render += f"<img src = '{filename}.png' class='img-fluid custom-img'>"
+        html_to_render += f"<img src = '{filename}.png' class='img-fluid custom-img' alt='{alt_text}'>"
         return html_to_render
 
     
